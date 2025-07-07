@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  manager
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  otp          String?
+  otpExpiresAt DateTime?
+  role         UserRole  @default(manager)
+  companyId    String?
+  company      Company?  @relation("CompanyUsers", fields: [companyId], references: [id])
+  adminOf      Company?  @relation("CompanyAdmin")
+}
+
+model Company {
+  id          String    @id @default(uuid())
+  subdomain   String    @unique
+  token       String
+  adminUserId String    @unique
+  adminUser   User      @relation("CompanyAdmin", fields: [adminUserId], references: [id])
+  users       User[]    @relation("CompanyUsers")
+  products    Product[] @relation("CompanyProducts")
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  companyId   String
+  company     Company @relation("CompanyProducts", fields: [companyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+   @@unique([name, companyId])
+}
