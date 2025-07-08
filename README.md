@@ -1,60 +1,40 @@
-# 🏢 OX Company Management API
+# OX Company Management API
 
-Bu loyiha NestJS asosida yaratilgan va kompaniya boshqaruvi hamda mahsulot qo‘shish API larini o‘z ichiga oladi.
+NestJS asosida yozilgan backend ilova. Kompaniya ro'yxatga olish, foydalanuvchi roli asosida boshqarish va OX'dan mahsulotlarni olish funksiyalarini o'z ichiga oladi.
 
-## 📦 Texnologiyalar
+## Texnologiyalar
 - NestJS
 - Prisma ORM
 - PostgreSQL
-- JWT (Authentication)
-- Swagger (API hujjat)
+- JWT
+- Swagger
 
----
-
-## 🔐 Auth
-Foydalanuvchi faqat `email` orqali login qiladi, unga OTP yuboriladi.
-
-**POST** `/auth/login`  
-**POST** `/auth/verify` → `access_token` qaytaradi
-
----
-
-## 🏢 Company Endpoints
-
-| Method | Endpoint              | Tavsif                                |
-|--------|-----------------------|----------------------------------------|
-| POST   | `/register-company`   | Tashqi OX API orqali kompaniya ro'yxatga olinadi |
-| DELETE | `/company/:id`        | Kompaniyani admin o‘chira oladi       |
-
----
-
-## 📦 Product Endpoints
-
-| Method | Endpoint         | Tavsif                                |
-|--------|------------------|----------------------------------------|
-| POST   | `/products`      | Mahsulot yaratish                     |
-| GET    | `/products`      | Barcha mahsulotlarni olish            |
-| GET    | `/products/:id`  | Bitta mahsulotni olish                |
-| PATCH  | `/products/:id`  | Mahsulotni tahrirlash                 |
-| DELETE | `/products/:id`  | Mahsulotni o‘chirish                  |
-
-> ⚠️ Faqat kompaniyaga biriktirilgan foydalanuvchilar mahsulot yaratishi mumkin.
-
----
-
-## 🛡️ Ruxsatlar
-
-| Role    | Tavsif                      |
-|---------|-----------------------------|
-| admin   | Kompaniya yaratuvchisi      |
-| manager | Mavjud kompaniyaga qo‘shilgan foydalanuvchi |
-
----
-
-## 🚀 Ishga tushirish
+## Ishga tushirish
 
 ```bash
 npm install
 npx prisma generate
 npx prisma migrate dev --name init
 npm run start:dev
+```
+
+## Auth
+
+**POST** `/auth/login` – Foydalanuvchi email orqali OTP olish  
+**POST** `/auth/verify` – OTP orqali token olish
+
+## Company
+
+**POST** `/company/register` – OX orqali kompaniya qo'shish  
+**DELETE** `/company/:id` – Admin o'z kompaniyasini o'chiradi
+
+## Products
+
+**GET** `/products?page=1&size=10` – OX API dan mahsulotlar ro'yxati  
+⚠️ Faqat `manager` rolidagi foydalanuvchi, `size > 20` bo‘lsa: 400 qaytariladi
+
+## Ruxsatlar
+
+- `admin` – kompaniya yaratuvchisi
+- `manager` – kompaniyaga qo‘shilgan foydalanuvchi
+

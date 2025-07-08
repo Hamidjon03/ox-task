@@ -29,6 +29,7 @@ export class CompanyController {
   }
 
   @Delete(':id')
+  @AdminOnly()
   @ApiResponse({ status: 200, description: 'Company deleted successfully' })
   delete(@Req() req, @Param('id') id: string) {
     return this.companyService.deleteCompany(req.user.id, id);
